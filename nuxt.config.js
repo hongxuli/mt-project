@@ -62,6 +62,6 @@ module.exports = {
     extend(config, ctx) {}
   },
   router: {
-    base: "/mt-project/"
+    base: "/"
   }
 };
