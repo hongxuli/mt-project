@@ -6,7 +6,9 @@
         v-for="item in alphabet"
         :key="item"
       >
-        <a :href="'#city-'+item">{{ item }}</a>
+        <nuxt-link :to="`#city-${item}`">
+          {{ item }}
+        </nuxt-link>
       </dd>
     </dl>
     <dl
@@ -21,14 +23,20 @@
         <span
           v-for="city in item.cities"
           :key="city"
-        >{{ city }}</span>
+          @click="changeCity(city)"
+        >
+          <nuxt-link to="/">{{ city }}</nuxt-link>
+        </span>
       </dd>
     </dl>
   </div>
 </template>
 <script>
 import pyjs from 'js-pinyin'
+import ChangeCity from "./mixinFunction/changeCity";
+
 export default {
+  mixins: [ChangeCity],
   data () {
     return {
       alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),

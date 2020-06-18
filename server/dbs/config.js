@@ -1,7 +1,8 @@
 export default {
-  dbs: "mongodb://127.0.0.1:27017/student",
+  dbs: "mongodb://127.0.0.1:27017/mt",
   redis: {
     get host() {
+      // need ip when deploy project
       return "127.0.0.1";
     },
     get port() {
@@ -10,13 +11,15 @@ export default {
   },
   smtp: {
     get host() {
-      return "smtp.qq.com";
+      // gmail: smtp.gmail.com
+      return "smtp.gmail.com";
     },
     get user() {
-      return "**@qq.com";
+      return "l597926159@gmail.com";
     },
     get pass() {
-      return "";
+      // auth code
+      return "loveisstrong5";
     },
     get code() {
       return () => {

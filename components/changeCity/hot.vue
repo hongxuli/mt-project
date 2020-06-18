@@ -5,8 +5,11 @@
       <dd
         v-for="item in list"
         :key="item.id"
+        @click="changeCity(item)"
       >
-        {{ item.name==='市辖区'?item.province:item.name }}
+        <nuxt-link to="/">
+          {{ item.name==='市辖区'?item.province:item.name }}
+        </nuxt-link>
       </dd>
     </dl>
   </div>
@@ -26,10 +29,12 @@ export default {
     }
   },
   methods:{
-    // changeCity:function (item) {
-    //   this['geo/setPosition'](item.name)
-    //   },
-    // mapActions(['geo/setPosition'])
+    changeCity:function (item) {
+
+      const position = { province: item.province, city: item.name==='市辖区'?item.province:item.name}
+      this.$store.dispatch('geo/setPosition',position)
+      // this.$router.push('/')
+      }
   }
 }
 </script>

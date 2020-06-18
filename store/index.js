@@ -22,7 +22,6 @@ const store = () =>
           status === 200
             ? { city: "上海市", province: "上海市" }
             : { city: "", province: "" }
-          // 由于api无法识别国外地址  默认合肥市
         );
 
         const {

@@ -13,29 +13,29 @@ let Store = new Redis().client;
 router.post("/signup", async ctx => {
   const { username, password, email, code } = ctx.request.body;
 
-  // if (code) {
-  //   const saveCode = await Store.hget(`nodemail:${username}`, "code");
-  //   const saveExpire = await Store.hget(`nodemail:${username}`, "expire");
-  //   if (code === saveCode) {
-  //     if (new Date().getTime() - saveExpire > 0) {
-  //       ctx.body = {
-  //         code: -1,
-  //         msg: "验证码已过期，请重新尝试"
-  //       };
-  //       return false;
-  //     }
-  //   } else {
-  //     ctx.body = {
-  //       code: -1,
-  //       msg: "请填写正确的验证码"
-  //     };
-  //   }
-  // } else {
-  //   ctx.body = {
-  //     code: -1,
-  //     msg: "请填写验证码"
-  //   };
-  // }
+  if (code) {
+    const saveCode = await Store.hget(`nodemail:${username}`, "code");
+    const saveExpire = await Store.hget(`nodemail:${username}`, "expire");
+    if (code === saveCode) {
+      if (new Date().getTime() - saveExpire > 0) {
+        ctx.body = {
+          code: -1,
+          msg: "验证码已过期，请重新尝试"
+        };
+        return false;
+      }
+    } else {
+      ctx.body = {
+        code: -1,
+        msg: "请填写正确的验证码"
+      };
+    }
+  } else {
+    ctx.body = {
+      code: -1,
+      msg: "请填写验证码"
+    };
+  }
   let user = await User.find({ username });
   if (user.length) {
     ctx.body = {
@@ -103,9 +103,7 @@ router.post("/verify", async (ctx, next) => {
     return false;
   }
   let transporter = nodeMailer.createTransport({
-    host: Email.smtp.host,
-    port: 587,
-    secure: false,
+    service: "gmail",
     auth: {
       user: Email.smtp.user,
       pass: Email.smtp.pass
@@ -118,13 +116,14 @@ router.post("/verify", async (ctx, next) => {
     user: ctx.request.body.username
   };
   let mailOptions = {
-    from: `"认证邮件" <${Email.smtp.user}>`,
+    from: `"mt" <${Email.smtp.user}>`,
     to: ko.email,
-    subject: "《慕课网高仿美团网全栈实战》注册码",
-    html: `您在《慕课网高仿美团网全栈实战》课程中注册，您的邀请码是${ko.code}`
+    subject: "verification code",
+    html: `your register code is ${ko.code}`
   };
   await transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
+      console.log("error: ");
       return console.log(error);
     } else {
       Store.hmset(

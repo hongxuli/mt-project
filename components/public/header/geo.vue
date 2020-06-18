@@ -6,7 +6,7 @@
       to="/changeCity"
     >
       切换城市
-    </nuxt-link>[]
+    </nuxt-link>
   </div>
 </template>
 
